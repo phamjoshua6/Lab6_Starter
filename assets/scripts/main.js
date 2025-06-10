@@ -84,4 +84,40 @@ function initFormHandler() {
 	// Steps B12 & B13 will occur inside the event listener from step B11
 	// B12. TODO - Clear the local storage
 	// B13. TODO - Delete the contents of <main>
+	const form = document.querySelector('form');
+
+	form.addEventListener('submit', (e) => {
+	  e.preventDefault();
+  
+	  const formData = new FormData(form);
+  
+	  const recipeObject = {};
+	  for (const [key, value] of formData.entries()) {
+		recipeObject[key] = value;
+	  }
+  
+	  const recipeCard = document.createElement('recipe-card');
+  
+	  recipeCard.data = recipeObject;
+  
+	  const main = document.querySelector('main');
+	  main.appendChild(recipeCard);
+  
+	  const recipes = getRecipesFromStorage();
+	  recipes.push(recipeObject);
+	  saveRecipesToStorage(recipes);
+  
+	  form.reset();
+	  const clearButton = document.getElementById('clear-storage');
+
+	  // B11: Add click listener
+	  clearButton.addEventListener('click', () => {
+		// B12: Clear localStorage
+		localStorage.clear();
+	
+		// B13: Clear main content
+		document.querySelector('main').innerHTML = '';
+	  });
+	});
+
 }
